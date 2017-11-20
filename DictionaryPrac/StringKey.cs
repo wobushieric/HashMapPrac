@@ -16,9 +16,9 @@ namespace DictionaryPrac
             this.KeyName = keyName;
         }
 
-        public int CompareTo(StringKey other)
+        public int CompareTo(StringKey otherStringKey)
         {
-            throw new NotImplementedException();
+            return this.KeyName.CompareTo(otherStringKey.KeyName);
         }
 
         public override int GetHashCode()
@@ -44,17 +44,17 @@ namespace DictionaryPrac
 
             if (o.GetType() != typeof(StringKey))
             {
-                throw new ArgumentException("Cannot compare with object whice type is not StringKey");
+                return false;
             }
 
-            StringKey newO = (StringKey)o;
-
-            if (newO.KeyName == this.KeyName)
+            if (object.ReferenceEquals(this, o))
             {
                 return true;
             }
 
-            return false;
+            StringKey newO = (StringKey)o;
+
+            return newO.KeyName == this.KeyName;
         }
 
         public override string ToString()
