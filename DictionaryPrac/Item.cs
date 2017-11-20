@@ -21,7 +21,7 @@ namespace DictionaryPrac
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}", this.Name, this.GoldPeices, this.Weight);
+            return string.Format("{0}, {1}, {2}", this.Name, this.GoldPeices, this.Weight);
         }
 
         public int CompareTo(Item item)
