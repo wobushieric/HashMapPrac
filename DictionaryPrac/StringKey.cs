@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DictionaryPrac
 {
-    class StringKey : IComparable<StringKey>
+    public class StringKey : IComparable<StringKey>
     {
         public string KeyName { get; }
         private const double Coefficient = 31;

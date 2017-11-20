@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,8 @@ namespace DictionaryPrac
 
         V Remove(K key);
 
-        
+        IEnumerator<K> Keys();
 
+        IEnumerator<V> Values();
     }
 }
