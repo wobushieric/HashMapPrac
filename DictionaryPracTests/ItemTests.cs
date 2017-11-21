@@ -24,7 +24,13 @@ namespace DictionaryPrac.Tests
         [TestMethod()]
         public void CompareToTest()
         {
-            //Assert.Fail();
+            Item lowWeightItem = new Item("Item", 5, 2.5);
+
+            Item highWeightItem = new Item("Item", 5, 4.5);
+
+            Assert.AreEqual(-1, lowWeightItem.CompareTo(highWeightItem));
+            Assert.AreEqual(1, highWeightItem.CompareTo(lowWeightItem));
+            Assert.AreEqual(0, lowWeightItem.CompareTo(lowWeightItem));
         }
     }
 }
