@@ -34,7 +34,7 @@ namespace DictionaryPrac.Tests
         {
             StringKey stringKey = new StringKey("Test");
 
-            Assert.AreEqual(false, stringKey.Equals(new Item("A",1,1.5)));
+            Assert.AreEqual(false, stringKey.Equals(new Item("A", 1, 1.5)));
         }
 
         [TestMethod()]
@@ -65,6 +65,18 @@ namespace DictionaryPrac.Tests
             StringKey otherStringKey = new StringKey("Test");
 
             Assert.AreEqual(false, stringKey.Equals(otherStringKey));
+        }
+
+        [TestMethod()]
+        public void GetHashCodeTest()
+        {
+            double coe = 31;
+
+            StringKey stringKey = new StringKey("and");
+
+            int expected = (int)(('a' - '0') * 1 + ('n' - '0') * coe + ('d' - '0') * coe * coe);
+
+            Assert.AreEqual(expected, stringKey.GetHashCode());
         }
     }
 }
