@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ItemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringKeyTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DictionaryPrac\DictionaryPrac.csproj">
