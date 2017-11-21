@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DictionaryPrac
 {
-    class Item : IComparable<Item>
+    public class Item : IComparable<Item>
     {
         public string Name { get; }
         public int GoldPeices { get; }
