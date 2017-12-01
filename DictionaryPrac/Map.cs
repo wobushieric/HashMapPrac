@@ -21,8 +21,8 @@ namespace DictionaryPrac
 
         V Remove(K key);
 
-        IEnumerator<K> Keys();
+        IEnumerable<K> Keys();
 
-        IEnumerator<V> Values();
+        IEnumerable<V> Values();
     }
 }
