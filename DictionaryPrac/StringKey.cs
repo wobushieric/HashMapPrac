@@ -32,7 +32,7 @@ namespace DictionaryPrac
                 hash += (int)((keyNameArray[i] - '0') * Math.Pow(StringKey.Coefficient, i));
             }
 
-            return hash;
+            return Math.Abs(hash);
         }
 
         public override bool Equals(Object o)

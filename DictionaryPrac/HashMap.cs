@@ -24,12 +24,14 @@ namespace DictionaryPrac
         {
             this._table = new Entry<K, V>[DEFAULT_CAPACITY];
             this._loadFactor = DEFAULT_LOADFACTOR;
+            this._threshold = (int)(DEFAULT_CAPACITY * DEFAULT_LOADFACTOR);
         }
 
         public HashMap(int initialCapacity)
         {
             this._table = new Entry<K, V>[initialCapacity];
             this._loadFactor = DEFAULT_LOADFACTOR;
+            this._threshold = (int) (initialCapacity * DEFAULT_LOADFACTOR);
         }
 
         public HashMap(int initialCapacity, double loadFactor)
@@ -41,6 +43,7 @@ namespace DictionaryPrac
 
             this._loadFactor = loadFactor;
             this._table = new Entry<K, V>[initialCapacity];
+            this._threshold = (int) (initialCapacity * loadFactor);
         }
 
         int Map<K, V>.Size()
@@ -72,16 +75,26 @@ namespace DictionaryPrac
 
             int bucket = this.findBucket(key);
 
-            V oldValue = this._table[bucket].V;
+            V oldValue;
 
-            this._table[bucket] = new Entry<K, V>(key, value);
-
-            this._size++;
-
-            if (this._size >= this._table.Length * this._threshold)
+            if ((this._size + 1) >= this._threshold)
             {
                 this.rehash();
             }
+
+            if (this._table[bucket] != null)
+            {
+                oldValue = this._table[bucket].V;
+            }
+            else
+            {
+                oldValue = default(V);
+
+                this._size++;
+            }
+
+            this._table[bucket] = new Entry<K, V>(key, value);
+
 
             return oldValue;
         }
@@ -110,7 +123,10 @@ namespace DictionaryPrac
 
             foreach (Entry<K, V> item in this._table)
             {
-                keyList.Add(item.K);
+                if (item != null)
+                {
+                    keyList.Add(item.K);
+                }
             }
 
             return keyList;
@@ -122,7 +138,10 @@ namespace DictionaryPrac
 
             foreach (Entry<K, V> item in this._table)
             {
-                keyList.Add(item.V);
+                if (item != null)
+                {
+                    keyList.Add(item.V);
+                }
             }
 
             return keyList;
@@ -130,7 +149,7 @@ namespace DictionaryPrac
 
         private int findBucket(K key)
         {
-            return key.GetHashCode() % this._table.Length;
+            return Math.Abs(key.GetHashCode() % this._table.Length);
         }
 
         private int findMatchingBucket(K key)
@@ -150,18 +169,20 @@ namespace DictionaryPrac
 
             foreach (Entry<K, V> item in oldTable)
             {
-                if (!item.Equals(null))
+                if (item != null)
                 {
                     int bucket = item.K.GetHashCode() % newSize;
 
                     this._table[bucket] = item;
                 }
             }
+
+            this._threshold = (int)(newSize * DEFAULT_LOADFACTOR);
         }
 
         private int resize()
         {
-            int startNumber = (this._size * 2) + 1;
+            int startNumber = (this._table.Length * 2) + 1;
 
             while (!this.isPrimeNumber(startNumber))
             {
@@ -175,7 +196,7 @@ namespace DictionaryPrac
         {
             bool isPrime = true;
 
-            for (int i = 3; i <= 9; i++)
+            for (int i = 3; i <= (int)Math.Sqrt(number); i++)
             {
                 if (number % i == 0)
                 {
