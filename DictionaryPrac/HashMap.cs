@@ -46,7 +46,7 @@ namespace DictionaryPrac
             this._threshold = (int) (initialCapacity * loadFactor);
         }
 
-        int Map<K, V>.Size()
+        public int Size()
         {
             return this._size;
         }
@@ -59,6 +59,8 @@ namespace DictionaryPrac
         public void Clear()
         {
             this._size = 0;
+
+            this._table = new Entry<K, V>[DEFAULT_CAPACITY];
         }
 
         public V Get(K key)
@@ -68,7 +70,7 @@ namespace DictionaryPrac
 
         public V Put(K key, V value)
         {
-            if (key.Equals(null) || value.Equals(null))
+            if (key == null || value == null)
             {
                 throw new ArgumentException("key and value cannot be null");
             }
