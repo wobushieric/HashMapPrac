@@ -11,7 +11,11 @@ namespace DictionaryPrac
     {
         static void Main(string[] args)
         {
+            const int maxCarryCapacity = 75;
+            double carryCapacity = 0.0;
+
             string[] lines = System.IO.File.ReadAllLines(@"ItemData.txt");
+            string[] adventureLoot = System.IO.File.ReadAllLines(@"adventureLoot.txt");
 
             HashMap<StringKey, Item> hashMap = new HashMap<StringKey, Item>(5);
 
@@ -28,7 +32,45 @@ namespace DictionaryPrac
 
             IEnumerable list = hashMap.Keys();
 
-            foreach (StringKey key in list)
+            HashMap<String, int> backPackHashMap = new HashMap<string, int>();
+
+            IEnumerable backPackKeys;
+
+            foreach (string lootItem in adventureLoot)
+            {
+                bool isUnknow = true;
+
+                foreach (StringKey key in list)
+                {
+                    if (key.KeyName.Equals(lootItem))
+                    {
+                        isUnknow = false;
+                    }
+                }
+
+                if (isUnknow)
+                {
+                    Console.WriteLine("You find an unknown item that is not in your loot table, you leave it alone. Item name: " + lootItem);
+
+                    List<string> backPackKeysList= (List<string>)backPackHashMap.Keys();
+
+                    if (backPackKeysList.Contains(lootItem))
+                    {
+                        backPackHashMap.Put(lootItem, backPackHashMap.Get(lootItem) + 1);
+                    }
+                    else
+                    {
+                        backPackHashMap.Put(lootItem, 1);
+                    }
+
+                    //TODO: DO NOT ALLOW ITEM TO BE ADDED INTO BACK PACK WHEN REACH TO CARRY CAPACITY
+                    carryCapacity += hashMap.Get(new StringKey(lootItem)).Weight;
+
+                    Console.WriteLine("You have picke up a " + lootItem);
+                }
+            }
+
+            /*foreach (StringKey key in list)
             {
                 Item i = hashMap.Get(key);
 
@@ -40,7 +82,7 @@ namespace DictionaryPrac
                 {
                     Console.WriteLine(i.ToString());
                 }
-            }
+            }*/
 
             Console.ReadLine();
         }
