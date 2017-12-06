@@ -23,13 +23,11 @@ namespace DictionaryPrac
 
         public override int GetHashCode()
         {
-            char[] keyNameArray = this.KeyName.ToCharArray();
-
             int hash = 0;
 
-            for (int i = 0; i < keyNameArray.Length; i++)
+            for (int i = 0; i < KeyName.Length; i++)
             {
-                hash += (int)((keyNameArray[i] - '0') * Math.Pow(StringKey.Coefficient, i));
+                hash += (int)(KeyName[i] * Math.Pow(StringKey.Coefficient, i));
             }
 
             return Math.Abs(hash);

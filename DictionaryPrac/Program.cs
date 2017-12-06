@@ -34,7 +34,7 @@ namespace DictionaryPrac
 
             HashMap<String, int> backPackHashMap = new HashMap<string, int>();
 
-            IEnumerable backPackKeys;
+            List<string> backPackKeysList = new List<string>();
 
             foreach (string lootItem in adventureLoot)
             {
@@ -50,25 +50,60 @@ namespace DictionaryPrac
 
                 if (isUnknow)
                 {
-                    Console.WriteLine("You find an unknown item that is not in your loot table, you leave it alone. Item name: " + lootItem);
+                    Console.WriteLine(
+                        "You find an unknown item that is not in your loot table, you leave it alone. Item name: " +
+                        lootItem);                  
+                }
+                else
+                {
+                    carryCapacity += hashMap.Get(new StringKey(lootItem)).Weight;
 
-                    List<string> backPackKeysList= (List<string>)backPackHashMap.Keys();
-
-                    if (backPackKeysList.Contains(lootItem))
+                    if (carryCapacity < maxCarryCapacity)
                     {
-                        backPackHashMap.Put(lootItem, backPackHashMap.Get(lootItem) + 1);
+                        backPackKeysList = (List<string>) backPackHashMap.Keys();
+
+                        if (backPackKeysList.Contains(lootItem))
+                        {
+                            backPackHashMap.Put(lootItem, backPackHashMap.Get(lootItem) + 1);
+                        }
+                        else
+                        {
+                            backPackHashMap.Put(lootItem, 1);
+                        }
+
+                        Console.WriteLine("You have picke up a " + lootItem);
                     }
                     else
                     {
-                        backPackHashMap.Put(lootItem, 1);
+                        Console.WriteLine("You acnnot pick up the " + 
+                                          lootItem + ", you are already carrying " + 
+                                          (carryCapacity - hashMap.Get(new StringKey(lootItem)).Weight) + 
+                                          " and it weights " + hashMap.Get(new StringKey(lootItem)).Weight);
                     }
-
-                    //TODO: DO NOT ALLOW ITEM TO BE ADDED INTO BACK PACK WHEN REACH TO CARRY CAPACITY
-                    carryCapacity += hashMap.Get(new StringKey(lootItem)).Weight;
-
-                    Console.WriteLine("You have picke up a " + lootItem);
                 }
             }
+
+            Console.WriteLine();
+            Console.WriteLine("You sell the following items:");
+            Console.WriteLine();
+
+            int total = 0;
+
+            backPackKeysList = (List<string>)backPackHashMap.Keys();
+
+            foreach (string backPackKey in backPackKeysList)
+            {
+                int subtotal = hashMap.Get(new StringKey(backPackKey)).GoldPeices * backPackHashMap.Get(backPackKey);
+
+                total += subtotal;
+
+                Console.WriteLine(
+                    $"{backPackKey}, {hashMap.Get(new StringKey(backPackKey)).GoldPeices}GP, {hashMap.Get(new StringKey(backPackKey)).Weight} - Qty: {backPackHashMap.Get(backPackKey)} - Subtotal: {subtotal}GP");
+
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Total value of sold loot items: " + total + "GP");
 
             /*foreach (StringKey key in list)
             {
@@ -78,7 +113,7 @@ namespace DictionaryPrac
                 {
                     hashMap.Remove(key);
                 }
-                else
+                else if(key.KeyName.Equals(i.Name))
                 {
                     Console.WriteLine(i.ToString());
                 }

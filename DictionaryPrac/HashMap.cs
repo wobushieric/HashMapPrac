@@ -20,18 +20,14 @@ namespace DictionaryPrac
         private const int DEFAULT_CAPACITY = 11;
         private const double DEFAULT_LOADFACTOR = 0.75;
 
-        public HashMap()
+        public HashMap(): this(DEFAULT_CAPACITY)
         {
-            this._table = new Entry<K, V>[DEFAULT_CAPACITY];
-            this._loadFactor = DEFAULT_LOADFACTOR;
-            this._threshold = (int)(DEFAULT_CAPACITY * DEFAULT_LOADFACTOR);
+
         }
 
-        public HashMap(int initialCapacity)
+        public HashMap(int initialCapacity):this(initialCapacity,DEFAULT_LOADFACTOR)
         {
-            this._table = new Entry<K, V>[initialCapacity];
-            this._loadFactor = DEFAULT_LOADFACTOR;
-            this._threshold = (int) (initialCapacity * DEFAULT_LOADFACTOR);
+
         }
 
         public HashMap(int initialCapacity, double loadFactor)
@@ -65,7 +61,7 @@ namespace DictionaryPrac
 
         public V Get(K key)
         {
-            return this._table[this.findBucket(key)].V;
+            return this._table[this.findBucket(key)].value;
         }
 
         public V Put(K key, V value)
@@ -75,18 +71,20 @@ namespace DictionaryPrac
                 throw new ArgumentException("key and value cannot be null");
             }
 
-            int bucket = this.findBucket(key);
-
-            V oldValue;
-
             if ((this._size + 1) >= this._threshold)
             {
                 this.rehash();
             }
 
+            int bucket = this.findBucket(key);
+
+            V oldValue;
+
             if (this._table[bucket] != null)
             {
-                oldValue = this._table[bucket].V;
+                Console.WriteLine(this._table[bucket]);
+
+                oldValue = this._table[bucket].value;
             }
             else
             {
@@ -110,7 +108,7 @@ namespace DictionaryPrac
                 return  default(V);
             }
 
-            V oldV = this._table[bucket].V;
+            V oldV = this._table[bucket].value;
 
             this._table[bucket] = null;
 
@@ -127,7 +125,7 @@ namespace DictionaryPrac
             {
                 if (item != null)
                 {
-                    keyList.Add(item.K);
+                    keyList.Add(item.key);
                 }
             }
 
@@ -142,7 +140,7 @@ namespace DictionaryPrac
             {
                 if (item != null)
                 {
-                    keyList.Add(item.V);
+                    keyList.Add(item.value);
                 }
             }
 
@@ -169,17 +167,17 @@ namespace DictionaryPrac
 
             this._table = new Entry<K, V>[newSize];
 
+            this._size = 0;
+
+            this._threshold = (int)(newSize * _loadFactor);
+
             foreach (Entry<K, V> item in oldTable)
             {
                 if (item != null)
                 {
-                    int bucket = item.K.GetHashCode() % newSize;
-
-                    this._table[bucket] = item;
+                    this.Put(item.key, item.value);
                 }
             }
-
-            this._threshold = (int)(newSize * DEFAULT_LOADFACTOR);
         }
 
         private int resize()
@@ -210,20 +208,20 @@ namespace DictionaryPrac
             return isPrime;
         }
 
-        public class Entry<Key, Value>
+        public class Entry<K, V>
         {
-            public Key K { get; }
-            public Value V { get; set; }
+            public K key { get; }
+            public V value { get; set; }
 
-            public Entry(Key k, Value v)
+            public Entry(K key, V value)
             {
-                this.K = k;
-                this.V = v;
+                this.key = key;
+                this.value = value;
             }
 
             public override string ToString()
             {
-                return string.Format("[{0}]: [{1}]", this.K, this.V);
+                return string.Format("[{0}]: [{1}]", this.key, this.value);
             }
         }
     }
